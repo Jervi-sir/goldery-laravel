@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { CreditCard, Lock, ShieldCheck } from 'lucide-react';
 import type { BreadcrumbItem } from '@/types';
 import { useEffect } from 'react';
+import SubscriptionController from '@/actions/App/Http/Controllers/SubscriptionController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -28,7 +29,7 @@ export default function Checkout({ plan }: CheckoutProps) {
 
     const submit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
-        post('/subscription/checkout');
+        post(SubscriptionController.store().url);
     };
 
     // Listen for Enter key

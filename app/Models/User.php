@@ -25,7 +25,7 @@ class User extends Authenticatable
         'profile_photo_path',
         'is_subscribed',
         'role_id',
-        'password_plaintext'
+        'password_plaintext',
     ];
 
     /**
@@ -38,7 +38,7 @@ class User extends Authenticatable
         'two_factor_secret',
         'two_factor_recovery_codes',
         'remember_token',
-        'password_plaintext'
+        'password_plaintext',
     ];
 
     /**

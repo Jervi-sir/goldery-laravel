@@ -13,13 +13,26 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [MetalPriceController::class, 'dashboard'])->name('dashboard');
-    Route::post('prices/fetch', [MetalPriceController::class, 'fetch'])->name('prices.fetch');
+    Route::get('metals/history', [MetalPriceController::class, 'history'])->name('metals.history');
 
     // Subscription routes
     Route::get('subscription', [\App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');
     Route::get('subscription/checkout', [\App\Http\Controllers\SubscriptionController::class, 'checkout'])->name('subscription.checkout');
     Route::post('subscription/checkout', [\App\Http\Controllers\SubscriptionController::class, 'store'])->name('subscription.store');
     Route::get('subscription/history', [\App\Http\Controllers\SubscriptionController::class, 'history'])->name('subscription.history');
+    Route::get('subscription/success', [\App\Http\Controllers\Subscription\StatusController::class, 'success'])->name('subscription.success');
+    Route::get('subscription/failure', [\App\Http\Controllers\Subscription\StatusController::class, 'failure'])->name('subscription.failure');
 });
+
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', \App\Http\Controllers\Admin\AdminDashboardController::class)->name('dashboard');
+    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::put('users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+    Route::get('billing', [\App\Http\Controllers\Admin\BillingController::class, 'index'])->name('billing.index');
+    Route::post('prices/metal', [\App\Http\Controllers\Admin\PriceProposalController::class, 'storeMetal'])->name('prices.metal.store');
+    Route::post('prices/currency', [\App\Http\Controllers\Admin\PriceProposalController::class, 'storeCurrency'])->name('prices.currency.store');
+});
+
+Route::post('chargily/webhook', [\App\Http\Controllers\Subscription\WebhookController::class, 'handle'])->name('chargily.webhook');
 
 require __DIR__ . '/settings.php';

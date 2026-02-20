@@ -71,7 +71,7 @@ export default function SubscriptionHistory({ subscriptions, payments }: Props) 
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout>
             <Head title="Subscription History" />
 
             <div className="flex flex-1 flex-col gap-8 p-4 md:p-8 max-w-7xl mx-auto w-full">

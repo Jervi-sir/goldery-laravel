@@ -14,11 +14,11 @@ class DatabaseSeeder extends Seeder
     {
 
         \App\Models\Role::firstOrCreate(['name' => 'admin'], [
-            'description' => 'Administrator with full access'
+            'description' => 'Administrator with full access',
         ]);
 
         \App\Models\Role::firstOrCreate(['name' => 'user'], [
-            'description' => 'Regular user'
+            'description' => 'Regular user',
         ]);
 
         $adminRole = \App\Models\Role::where('name', 'admin')->first();
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Gold Tracker Admin',
             'email' => 'admin@goldery.com',
             'is_subscribed' => true,
-            'role_id' => $adminRole->id
+            'role_id' => $adminRole->id,
         ]);
 
         \App\Models\MetalPrice::create(['type' => 'gold', 'price' => 2030.50, 'currency' => 'USD', 'unit' => 'ounce']);

@@ -1,12 +1,10 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 import { dashboard } from '@/routes';
-import prices from '@/routes/prices';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import {
     Calculator,
@@ -21,6 +19,7 @@ import {
     Coins
 } from 'lucide-react';
 import { useState } from 'react';
+import SubscriptionController from '@/actions/App/Http/Controllers/SubscriptionController';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -54,13 +53,18 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ data, isSubscribed }: DashboardProps) {
-    const { post, processing } = useForm();
+    const [processing, setProcessing] = useState(false);
     const [weight, setWeight] = useState<string>('');
     const [karat, setKarat] = useState<string>('18k');
     const [origin, setOrigin] = useState<'local' | 'italian'>('local');
 
     const handleRefresh = () => {
-        post(prices.fetch().url);
+        setProcessing(true);
+        // Just reload the data from the database, the backend handles the hourly sync.
+        router.reload({
+            only: ['data'],
+            onFinish: () => setProcessing(false)
+        });
     };
 
     const formatCurrency = (amount: number) => {
@@ -90,8 +94,10 @@ export default function Dashboard({ data, isSubscribed }: DashboardProps) {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="flex justify-center pb-8">
-                            <Button className="bg-amber-600 hover:bg-amber-700 text-white px-8">
-                                Upgrade to Subscribed
+                            <Button asChild className="bg-amber-600 hover:bg-amber-700 text-white px-8">
+                                <Link href={SubscriptionController.checkout().url}>
+                                    Upgrade to Subscribed
+                                </Link>
                             </Button>
                         </CardContent>
                     </Card>

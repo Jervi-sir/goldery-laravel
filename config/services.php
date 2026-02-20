@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'chargily' => [
+        'key' => env('CHARGILY_APP_KEY'),
+        'secret' => env('CHARGILY_APP_SECRET'),
+        'url' => env('CHARGILY_URL', 'https://pay.chargily.net/test/api/v2'),
+    ],
+
 ];

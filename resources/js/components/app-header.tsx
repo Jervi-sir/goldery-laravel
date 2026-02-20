@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, History, LayoutGrid, Menu, Search } from 'lucide-react';
+import { BookOpen, Folder, History, LayoutGrid, Menu, Search, ShieldAlert, Users, CreditCard } from 'lucide-react';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -37,33 +37,14 @@ import AppLogoIcon from './app-logo-icon';
 import { ThemeToggle } from './theme-toggle';
 import { dashboard } from '@/routes';
 import SubscriptionController from '@/actions/App/Http/Controllers/SubscriptionController';
+import MetalPriceController from '@/actions/App/Http/Controllers/MetalPriceController';
+import AdminDashboardController from '@/actions/App/Http/Controllers/Admin/AdminDashboardController';
+import UserController from '@/actions/App/Http/Controllers/Admin/UserController';
+import BillingController from '@/actions/App/Http/Controllers/Admin/BillingController';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
 };
-
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Metal Prices',
-        href: '/prices', // Placeholder for now
-        icon: Folder,
-    },
-    {
-        title: 'Subscription',
-        href: SubscriptionController.index().url,
-        icon: BookOpen,
-    },
-    {
-        title: 'Billing History',
-        href: SubscriptionController.history().url,
-        icon: History,
-    },
-];
 
 const rightNavItems: NavItem[] = [];
 
@@ -71,10 +52,49 @@ const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
 export function AppHeader({ breadcrumbs = [] }: Props) {
-    const page = usePage();
+    const page = usePage<any>();
     const { auth } = page.props;
     const getInitials = useInitials();
     const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
+
+    const isAdmin = auth?.user?.role?.name === 'admin';
+
+    const mainNavItems: NavItem[] = [
+        {
+            title: 'Dashboard',
+            href: MetalPriceController.dashboard().url,
+            icon: LayoutGrid,
+        },
+        {
+            title: 'Metal Prices',
+            href: MetalPriceController.history().url,
+            icon: Folder,
+        },
+        {
+            title: 'Billing History',
+            href: SubscriptionController.history().url,
+            icon: History,
+        },
+    ];
+
+    if (isAdmin) {
+        mainNavItems.push({
+            title: 'Admin Dashboard',
+            href: AdminDashboardController().url,
+            icon: ShieldAlert,
+        });
+        mainNavItems.push({
+            title: 'User Management',
+            href: UserController.index().url,
+            icon: Users,
+        });
+        mainNavItems.push({
+            title: 'All Billing',
+            href: BillingController.index().url,
+            icon: CreditCard,
+        });
+    }
+
     return (
         <>
             <header className="sticky top-0 z-50 w-full border-b border-neutral-200/80 bg-white/80 backdrop-blur-md dark:border-neutral-800/80 dark:bg-neutral-900/80">
@@ -170,13 +190,6 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     <div className="ml-auto flex items-center space-x-2">
                         <div className="relative flex items-center space-x-1">
                             <ThemeToggle />
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="group h-9 w-9 cursor-pointer"
-                            >
-                                <Search className="!size-5 opacity-80 group-hover:opacity-100" />
-                            </Button>
                         </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>

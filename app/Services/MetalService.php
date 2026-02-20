@@ -32,7 +32,7 @@ class MetalService
         $pricePerGram24k = ($goldVal / $TROY_OZ_TO_GRAMS) * $usdRate;
 
         // Karat multiplier function
-        $getKaratPrice = fn($k) => ($pricePerGram24k * $k) / 24;
+        $getKaratPrice = fn ($k) => ($pricePerGram24k * $k) / 24;
 
         // Making charges (Labor) defaults
         $charges = [
@@ -75,7 +75,7 @@ class MetalService
             ],
             'silver_dzd' => [
                 'gram' => round(($silverVal / $TROY_OZ_TO_GRAMS) * $usdRate, 2),
-            ]
+            ],
         ];
     }
 
@@ -96,11 +96,11 @@ class MetalService
                         'type' => $type,
                         'price' => $data['price'],
                         'currency' => 'USD',
-                        'unit' => 'ounce'
+                        'unit' => 'ounce',
                     ]);
                 }
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error("Failed to fetch {$type} price: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error("Failed to fetch {$type} price: ".$e->getMessage());
             }
         }
 

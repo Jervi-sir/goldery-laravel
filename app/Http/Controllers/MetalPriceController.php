@@ -14,13 +14,27 @@ class MetalPriceController extends Controller
 
         return Inertia::render('dashboard', [
             'data' => $service->getDashboardData(),
-            'isSubscribed' => (bool) $user->is_subscribed
+            'isSubscribed' => (bool) $user->is_subscribed,
         ]);
     }
 
-    public function fetch(MetalService $service)
+    public function history(Request $request)
     {
-        $service->updatePrices();
-        return back()->with('success', 'Prices updated manually.');
+        $type = $request->query('type');
+
+        $query = \App\Models\MetalPrice::latest();
+
+        if ($type && in_array($type, ['gold', 'silver', 'copper'])) {
+            $query->where('type', $type);
+        }
+
+        $prices = $query->paginate(20)->withQueryString();
+
+        return Inertia::render('metals/history', [
+            'prices' => $prices,
+            'filters' => [
+                'type' => $type ?? 'all',
+            ],
+        ]);
     }
 }

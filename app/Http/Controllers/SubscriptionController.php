@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
-use App\Models\Subscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
@@ -29,42 +26,33 @@ class SubscriptionController extends Controller
     public function checkout(Request $request): Response
     {
         $plan = $request->query('plan', 'premium');
+
         return Inertia::render('subscription/checkout', [
             'plan' => $plan,
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request, \App\Services\ChargilyService $chargilyService): \Symfony\Component\HttpFoundation\Response
     {
         $user = Auth::user();
-        $planName = $request->input('plan', 'Premium Plan');
+        $plan = $request->input('plan', 'professional');
+        $planName = ucfirst($plan);
+        $price = 1000; // $plan === 'enterprise' ? '99.00' : '19.99';
 
-        // Create subscription
-        $subscription = Subscription::create([
-            'user_id' => $user->id,
-            'plan_name' => $planName,
-            'status' => 'active',
-            'starts_at' => now(),
-            'ends_at' => now()->addMonth(),
-        ]);
+        $paymentLink = $chargilyService->createPaymentLink(
+            "Goldery {$planName} Subscription",
+            $price,
+            [
+                'user_id' => $user->id,
+                'plan_name' => $planName,
+            ]
+        );
 
-        // Create payment
-        Payment::create([
-            'user_id' => $user->id,
-            'subscription_id' => $subscription->id,
-            'amount' => 19.99,
-            'currency' => 'USD',
-            'status' => 'succeeded',
-            'payment_method' => 'card',
-            'transaction_id' => 'fake_' . bin2hex(random_bytes(8)),
-        ]);
+        if (! $paymentLink || ! isset($paymentLink['url'])) {
+            return back()->withErrors(['message' => 'Failed to initiate payment. Please try again later.']);
+        }
 
-        // Update user
-        $user->update([
-            'is_subscribed' => true,
-        ]);
-
-        return redirect()->route('dashboard')->with('success', 'Subscription successful!');
+        return Inertia::location($paymentLink['url']);
     }
 
     public function history(Request $request): Response
