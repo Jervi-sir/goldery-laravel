@@ -1,12 +1,31 @@
 import { Head, Link, router } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
-import type { BreadcrumbItem } from '@/types';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Clock } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+} from '@/components/ui/card';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
+import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -49,10 +68,14 @@ interface HistoryProps {
 
 export default function History({ prices, filters }: HistoryProps) {
     const handleTypeChange = (value: string) => {
-        router.get('/metals/history', { type: value !== 'all' ? value : undefined }, {
-            preserveState: true,
-            preserveScroll: true,
-        });
+        router.get(
+            '/metals/history',
+            { type: value !== 'all' ? value : undefined },
+            {
+                preserveState: true,
+                preserveScroll: true,
+            },
+        );
     };
 
     const formatCurrency = (amount: number, currency: string) => {
@@ -76,8 +99,8 @@ export default function History({ prices, filters }: HistoryProps) {
         <AppLayout>
             <Head title="Metal Prices History" />
 
-            <div className="flex flex-1 flex-col gap-6 p-4 md:p-8 max-w-7xl mx-auto w-full">
-                <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm">
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-8">
+                <Card className="border-zinc-200 shadow-sm dark:border-zinc-800">
                     <CardHeader className="flex flex-row items-center justify-between pb-4">
                         <div className="space-y-1.5">
                             <CardTitle className="flex items-center gap-2 text-xl">
@@ -85,19 +108,29 @@ export default function History({ prices, filters }: HistoryProps) {
                                 Metal Prices History
                             </CardTitle>
                             <CardDescription>
-                                Historical log of scraped metal prices from the database.
+                                Historical log of scraped metal prices from the
+                                database.
                             </CardDescription>
                         </div>
                         <div className="w-[180px]">
-                            <Select value={filters?.type || 'all'} onValueChange={handleTypeChange}>
+                            <Select
+                                value={filters?.type || 'all'}
+                                onValueChange={handleTypeChange}
+                            >
                                 <SelectTrigger>
                                     <SelectValue placeholder="All Metals" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Metals</SelectItem>
+                                    <SelectItem value="all">
+                                        All Metals
+                                    </SelectItem>
                                     <SelectItem value="gold">Gold</SelectItem>
-                                    <SelectItem value="silver">Silver</SelectItem>
-                                    <SelectItem value="copper">Copper</SelectItem>
+                                    <SelectItem value="silver">
+                                        Silver
+                                    </SelectItem>
+                                    <SelectItem value="copper">
+                                        Copper
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -107,33 +140,49 @@ export default function History({ prices, filters }: HistoryProps) {
                             <Table>
                                 <TableHeader>
                                     <TableRow className="bg-zinc-50 dark:bg-zinc-900/50">
-                                        <TableHead className="w-[100px]">ID</TableHead>
+                                        <TableHead className="w-[100px]">
+                                            ID
+                                        </TableHead>
                                         <TableHead>Metal Type</TableHead>
                                         <TableHead>Price</TableHead>
                                         <TableHead>Unit</TableHead>
-                                        <TableHead className="text-right">Recorded At</TableHead>
+                                        <TableHead className="text-right">
+                                            Recorded At
+                                        </TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
                                     {prices.data.length > 0 ? (
                                         prices.data.map((price) => (
                                             <TableRow key={price.id}>
-                                                <TableCell className="font-medium text-zinc-500">#{price.id}</TableCell>
-                                                <TableCell className="capitalize font-bold text-zinc-900 dark:text-zinc-100">
+                                                <TableCell className="font-medium text-zinc-500">
+                                                    #{price.id}
+                                                </TableCell>
+                                                <TableCell className="font-bold text-zinc-900 capitalize dark:text-zinc-100">
                                                     {price.type}
                                                 </TableCell>
                                                 <TableCell className="font-mono">
-                                                    {formatCurrency(price.price, price.currency)}
+                                                    {formatCurrency(
+                                                        price.price,
+                                                        price.currency,
+                                                    )}
                                                 </TableCell>
-                                                <TableCell className="text-zinc-500 capitalize">{price.unit}</TableCell>
+                                                <TableCell className="text-zinc-500 capitalize">
+                                                    {price.unit}
+                                                </TableCell>
                                                 <TableCell className="text-right text-zinc-500">
-                                                    {formatDate(price.created_at)}
+                                                    {formatDate(
+                                                        price.created_at,
+                                                    )}
                                                 </TableCell>
                                             </TableRow>
                                         ))
                                     ) : (
                                         <TableRow>
-                                            <TableCell colSpan={5} className="h-24 text-center">
+                                            <TableCell
+                                                colSpan={5}
+                                                className="h-24 text-center"
+                                            >
                                                 No price history found.
                                             </TableCell>
                                         </TableRow>
@@ -144,15 +193,21 @@ export default function History({ prices, filters }: HistoryProps) {
 
                         {/* Pagination */}
                         {prices.last_page > 1 && (
-                            <div className="flex items-center justify-between mt-6">
+                            <div className="mt-6 flex items-center justify-between">
                                 <span className="text-sm text-zinc-500">
-                                    Showing page {prices.current_page} of {prices.last_page} ({prices.total} total records)
+                                    Showing page {prices.current_page} of{' '}
+                                    {prices.last_page} ({prices.total} total
+                                    records)
                                 </span>
-                                <div className="flex gap-2 relative z-10">
+                                <div className="relative z-10 flex gap-2">
                                     {prices.links.map((link, i) => {
                                         // Skip Next/Prev string labels for a cleaner look
-                                        if (link.label.includes('Previous') || link.label.includes('Next')) {
-                                            const isPrev = link.label.includes('Previous');
+                                        if (
+                                            link.label.includes('Previous') ||
+                                            link.label.includes('Next')
+                                        ) {
+                                            const isPrev =
+                                                link.label.includes('Previous');
                                             return (
                                                 <Button
                                                     key={i}
@@ -160,15 +215,30 @@ export default function History({ prices, filters }: HistoryProps) {
                                                     size="icon"
                                                     asChild={!!link.url}
                                                     disabled={!link.url}
-                                                    className={!link.url ? 'opacity-50 cursor-not-allowed' : ''}
+                                                    className={
+                                                        !link.url
+                                                            ? 'cursor-not-allowed opacity-50'
+                                                            : ''
+                                                    }
                                                 >
                                                     {link.url ? (
-                                                        <Link href={link.url} preserveScroll>
-                                                            {isPrev ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                                                        <Link
+                                                            href={link.url}
+                                                            preserveScroll
+                                                        >
+                                                            {isPrev ? (
+                                                                <ChevronLeft className="h-4 w-4" />
+                                                            ) : (
+                                                                <ChevronRight className="h-4 w-4" />
+                                                            )}
                                                         </Link>
                                                     ) : (
                                                         <span>
-                                                            {isPrev ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                                                            {isPrev ? (
+                                                                <ChevronLeft className="h-4 w-4" />
+                                                            ) : (
+                                                                <ChevronRight className="h-4 w-4" />
+                                                            )}
                                                         </span>
                                                     )}
                                                 </Button>
@@ -178,18 +248,37 @@ export default function History({ prices, filters }: HistoryProps) {
                                         return (
                                             <Button
                                                 key={i}
-                                                variant={link.active ? "default" : "outline"}
+                                                variant={
+                                                    link.active
+                                                        ? 'default'
+                                                        : 'outline'
+                                                }
                                                 size="icon"
                                                 asChild={!!link.url}
                                                 disabled={!link.url}
-                                                className={link.active ? "bg-amber-600 hover:bg-amber-700 text-white" : ""}
+                                                className={
+                                                    link.active
+                                                        ? 'bg-amber-600 text-white hover:bg-amber-700'
+                                                        : ''
+                                                }
                                             >
                                                 {link.url ? (
-                                                    <Link href={link.url} preserveScroll>
-                                                        <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                                    <Link
+                                                        href={link.url}
+                                                        preserveScroll
+                                                    >
+                                                        <span
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: link.label,
+                                                            }}
+                                                        />
                                                     </Link>
                                                 ) : (
-                                                    <span dangerouslySetInnerHTML={{ __html: link.label }} />
+                                                    <span
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: link.label,
+                                                        }}
+                                                    />
                                                 )}
                                             </Button>
                                         );

@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
 import { Form, Head, Link, usePage } from '@inertiajs/react';
+import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
 import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
@@ -8,14 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import type { BreadcrumbItem } from '@/types';
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import { edit } from '@/routes/profile';
-import { send } from '@/routes/verification';
+import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Profile settings',
+        title: 'Paramètres du profil',
         href: edit().url,
     },
 ];
@@ -31,16 +30,16 @@ export default function Profile({
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Profile settings" />
+            <Head title="Paramètres du profil" />
 
-            <h1 className="sr-only">Profile Settings</h1>
+            <h1 className="sr-only">Paramètres du profil</h1>
 
             <SettingsLayout>
                 <div className="space-y-6">
                     <Heading
                         variant="small"
-                        title="Profile information"
-                        description="Update your name and email address"
+                        title="Informations du profil"
+                        description="Mettez à jour votre nom et votre adresse e-mail"
                     />
 
                     <Form
@@ -54,8 +53,8 @@ export default function Profile({
                         {({ processing, recentlySuccessful, errors }) => (
                             <>
                                 <div className="flex items-center gap-4">
-                                    <div className="relative group">
-                                        <div className="size-20 rounded-full overflow-hidden border-2 border-zinc-100 dark:border-zinc-800">
+                                    <div className="group relative">
+                                        <div className="size-20 overflow-hidden rounded-full border-2 border-zinc-100 dark:border-zinc-800">
                                             {auth.user.profile_photo_path ? (
                                                 <img
                                                     src={`/storage/${auth.user.profile_photo_path}`}
@@ -63,14 +62,16 @@ export default function Profile({
                                                     className="size-full object-cover"
                                                 />
                                             ) : (
-                                                <div className="size-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-800 text-zinc-400 font-bold text-2xl">
+                                                <div className="flex size-full items-center justify-center bg-zinc-100 text-2xl font-bold text-zinc-400 dark:bg-zinc-800">
                                                     {auth.user.name.charAt(0)}
                                                 </div>
                                             )}
                                         </div>
                                     </div>
-                                    <div className="grid gap-1.5 flex-1">
-                                        <Label htmlFor="profile_photo">Profile Photo</Label>
+                                    <div className="grid flex-1 gap-1.5">
+                                        <Label htmlFor="profile_photo">
+                                            Photo de profil
+                                        </Label>
                                         <Input
                                             id="profile_photo"
                                             name="profile_photo"
@@ -78,13 +79,17 @@ export default function Profile({
                                             accept="image/*"
                                             className="mt-1 block w-full text-sm"
                                         />
-                                        <p className="text-xs text-muted-foreground">JPG, PNG or GIF. Max 2MB.</p>
-                                        <InputError message={errors.profile_photo} />
+                                        <p className="text-xs text-muted-foreground">
+                                            JPG, PNG ou GIF. Max 2 Mo.
+                                        </p>
+                                        <InputError
+                                            message={errors.profile_photo}
+                                        />
                                     </div>
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="name">Name</Label>
+                                    <Label htmlFor="name">Nom</Label>
 
                                     <Input
                                         id="name"
@@ -93,7 +98,7 @@ export default function Profile({
                                         name="name"
                                         required
                                         autoComplete="name"
-                                        placeholder="Full name"
+                                        placeholder="Nom complet"
                                     />
 
                                     <InputError
@@ -103,7 +108,7 @@ export default function Profile({
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="email">Email address</Label>
+                                    <Label htmlFor="email">Adresse e-mail</Label>
 
                                     <Input
                                         id="email"
@@ -122,39 +127,12 @@ export default function Profile({
                                     />
                                 </div>
 
-                                {mustVerifyEmail &&
-                                    auth.user.email_verified_at === null && (
-                                        <div>
-                                            <p className="-mt-4 text-sm text-muted-foreground">
-                                                Your email address is
-                                                unverified.{' '}
-                                                <Link
-                                                    href={send()}
-                                                    as="button"
-                                                    className="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
-                                                >
-                                                    Click here to resend the
-                                                    verification email.
-                                                </Link>
-                                            </p>
-
-                                            {status ===
-                                                'verification-link-sent' && (
-                                                    <div className="mt-2 text-sm font-medium text-green-600">
-                                                        A new verification link has
-                                                        been sent to your email
-                                                        address.
-                                                    </div>
-                                                )}
-                                        </div>
-                                    )}
-
                                 <div className="flex items-center gap-4">
                                     <Button
                                         disabled={processing}
                                         data-test="update-profile-button"
                                     >
-                                        Save
+                                        Enregistrer
                                     </Button>
 
                                     <Transition
@@ -165,7 +143,7 @@ export default function Profile({
                                         leaveTo="opacity-0"
                                     >
                                         <p className="text-sm text-neutral-600">
-                                            Saved
+                                            Enregistré
                                         </p>
                                     </Transition>
                                 </div>

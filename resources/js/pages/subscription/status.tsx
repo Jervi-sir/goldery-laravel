@@ -1,17 +1,23 @@
 import { Head, Link } from '@inertiajs/react';
-import AppLayout from '@/layouts/app-layout';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import AppLayout from '@/layouts/app-layout';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Subscription',
+        title: 'Abonnement',
         href: '/subscription',
     },
     {
-        title: 'Status',
+        title: 'Statut',
         href: '#',
     },
 ];
@@ -26,46 +32,60 @@ export default function Status({ status, message }: StatusProps) {
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={isSuccess ? 'Payment Successful' : 'Payment Failed'} />
+            <Head title={isSuccess ? 'Paiement réussi' : 'Paiement échoué'} />
 
-            <div className="flex flex-1 items-center justify-center p-4 md:p-8 max-w-xl mx-auto w-full">
-                <Card className="w-full border-none shadow-2xl overflow-hidden ring-1 ring-neutral-200 dark:ring-neutral-800">
-                    <div className={`h-2 ${isSuccess ? 'bg-emerald-500' : 'bg-destructive'} w-full`} />
-                    <CardHeader className="text-center pb-8 pt-10">
-                        <div className="flex justify-center mb-6">
+            <div className="mx-auto flex w-full max-w-xl flex-1 items-center justify-center p-4 md:p-8">
+                <Card className="w-full overflow-hidden border-none shadow-2xl ring-1 ring-neutral-200 dark:ring-neutral-800">
+                    <div
+                        className={`h-2 ${isSuccess ? 'bg-emerald-500' : 'bg-destructive'} w-full`}
+                    />
+                    <CardHeader className="pt-10 pb-8 text-center">
+                        <div className="mb-6 flex justify-center">
                             {isSuccess ? (
-                                <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-full animate-in zoom-in duration-500">
+                                <div className="animate-in rounded-full bg-emerald-100 p-4 duration-500 zoom-in dark:bg-emerald-900/30">
                                     <CheckCircle2 className="h-12 w-12 text-emerald-600" />
                                 </div>
                             ) : (
-                                <div className="p-4 bg-red-100 dark:bg-red-900/30 rounded-full animate-in zoom-in duration-500">
+                                <div className="animate-in rounded-full bg-red-100 p-4 duration-500 zoom-in dark:bg-red-900/30">
                                     <XCircle className="h-12 w-12 text-red-600" />
                                 </div>
                             )}
                         </div>
-                        <CardTitle className="text-3xl font-black text-neutral-900 dark:text-neutral-100 uppercase tracking-tight">
-                            {isSuccess ? 'Payment Sent!' : 'Payment Failed'}
+                        <CardTitle className="text-3xl font-black tracking-tight text-neutral-900 uppercase dark:text-neutral-100">
+                            {isSuccess ? 'Paiement envoyé !' : 'Paiement échoué'}
                         </CardTitle>
                     </CardHeader>
 
-                    <CardContent className="text-center pb-10">
-                        <p className="text-neutral-500 dark:text-neutral-400 text-lg">
+                    <CardContent className="pb-10 text-center">
+                        <p className="text-lg text-neutral-500 dark:text-neutral-400">
                             {message}
                         </p>
                         {isSuccess && (
                             <p className="mt-4 text-sm text-neutral-400">
-                                It may take a few minutes for your account to reflect the changes. We'll email you once the activation is complete.
+                                Quelques minutes peuvent être nécessaires pour que votre compte
+                                reflète les changements. Nous vous enverrons un e-mail une fois
+                                l'activation terminée.
                             </p>
                         )}
                     </CardContent>
 
-                    <CardFooter className="pb-8 gap-4 flex-col sm:flex-row">
-                        <Button asChild variant={isSuccess ? 'outline' : 'default'} className="w-full py-6 rounded-xl font-bold">
-                            <Link href="/dashboard">Return to Dashboard</Link>
+                    <CardFooter className="flex-col gap-4 pb-8 sm:flex-row">
+                        <Button
+                            asChild
+                            variant={isSuccess ? 'outline' : 'default'}
+                            className="w-full rounded-xl py-6 font-bold"
+                        >
+                            <Link href="/dashboard">Retour au tableau de bord</Link>
                         </Button>
                         {!isSuccess && (
-                            <Button asChild className="w-full py-6 rounded-xl font-bold bg-amber-500 hover:bg-amber-600">
-                                <Link href="/subscription/checkout">Try Again <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                            <Button
+                                asChild
+                                className="w-full rounded-xl bg-amber-500 py-6 font-bold hover:bg-amber-600"
+                            >
+                                <Link href="/subscription/checkout">
+                                    Réessayer{' '}
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                </Link>
                             </Button>
                         )}
                     </CardFooter>

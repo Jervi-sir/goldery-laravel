@@ -1,5 +1,16 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, ShieldAlert, Users, CreditCard } from 'lucide-react';
+import {
+    BookOpen,
+    Folder,
+    LayoutGrid,
+    ShieldAlert,
+    Users,
+    CreditCard,
+} from 'lucide-react';
+import AdminDashboardController from '@/actions/App/Http/Controllers/Admin/AdminDashboardController';
+import BillingController from '@/actions/App/Http/Controllers/Admin/BillingController';
+import UserController from '@/actions/App/Http/Controllers/Admin/UserController';
+import MetalPriceController from '@/actions/App/Http/Controllers/MetalPriceController';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -12,13 +23,9 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
-import AdminDashboardController from '@/actions/App/Http/Controllers/Admin/AdminDashboardController';
-import UserController from '@/actions/App/Http/Controllers/Admin/UserController';
-import BillingController from '@/actions/App/Http/Controllers/Admin/BillingController';
-import MetalPriceController from '@/actions/App/Http/Controllers/MetalPriceController';
-import { dashboard } from '@/routes';
 
 export function AppSidebar() {
     const { auth } = usePage<any>().props;

@@ -1,5 +1,20 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, History, LayoutGrid, Menu, Search, ShieldAlert, Users, CreditCard } from 'lucide-react';
+import {
+    BookOpen,
+    Folder,
+    History,
+    LayoutGrid,
+    Menu,
+    Search,
+    ShieldAlert,
+    Users,
+    CreditCard,
+} from 'lucide-react';
+import AdminDashboardController from '@/actions/App/Http/Controllers/Admin/AdminDashboardController';
+import BillingController from '@/actions/App/Http/Controllers/Admin/BillingController';
+import UserController from '@/actions/App/Http/Controllers/Admin/UserController';
+import MetalPriceController from '@/actions/App/Http/Controllers/MetalPriceController';
+import SubscriptionController from '@/actions/App/Http/Controllers/SubscriptionController';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -31,16 +46,11 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { cn, toUrl } from '@/lib/utils';
+import { dashboard } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 import { ThemeToggle } from './theme-toggle';
-import { dashboard } from '@/routes';
-import SubscriptionController from '@/actions/App/Http/Controllers/SubscriptionController';
-import MetalPriceController from '@/actions/App/Http/Controllers/MetalPriceController';
-import AdminDashboardController from '@/actions/App/Http/Controllers/Admin/AdminDashboardController';
-import UserController from '@/actions/App/Http/Controllers/Admin/UserController';
-import BillingController from '@/actions/App/Http/Controllers/Admin/BillingController';
 
 type Props = {
     breadcrumbs?: BreadcrumbItem[];
@@ -137,8 +147,6 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 </Link>
                                             ))}
                                         </div>
-
-
                                     </div>
                                 </div>
                             </SheetContent>

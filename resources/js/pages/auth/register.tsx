@@ -1,4 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
+import { User, Mail, Lock, UserPlus } from 'lucide-react';
+import AuthenticationController from '@/actions/App/Http/Controllers/AuthenticationController';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -7,18 +9,17 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import AuthLayout from '@/layouts/auth-layout';
 import { login } from '@/routes';
-import { store } from '@/routes/register';
-import { User, Mail, Lock, UserPlus } from 'lucide-react';
 
 export default function Register() {
     return (
         <AuthLayout
-            title="Create your account"
-            description="Join Goldery to start tracking market prices today"
+            title="Créez votre compte"
+            description="Rejoignez Goldery pour commencer à suivre les cours du marché aujourd'hui"
         >
-            <Head title="Register" />
+            <Head title="S'inscrire" />
             <Form
-                {...store.form()}
+                action={AuthenticationController.storeRegister.url()}
+                method="post"
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
                 className="flex flex-col gap-6"
@@ -27,9 +28,9 @@ export default function Register() {
                     <>
                         <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Full Name</Label>
+                                <Label htmlFor="name">Nom complet</Label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <User className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         id="name"
                                         type="text"
@@ -38,19 +39,17 @@ export default function Register() {
                                         tabIndex={1}
                                         autoComplete="name"
                                         name="name"
-                                        placeholder="Enter your full name"
+                                        placeholder="Entrez votre nom complet"
                                         className="pl-10"
                                     />
                                 </div>
-                                <InputError
-                                    message={errors.name}
-                                />
+                                <InputError message={errors.name} />
                             </div>
 
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email Address</Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                    <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         id="email"
                                         type="email"
@@ -65,11 +64,11 @@ export default function Register() {
                                 <InputError message={errors.email} />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div className="grid gap-2">
-                                    <Label htmlFor="password">Password</Label>
+                                    <Label htmlFor="password">Mot de passe</Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         <Input
                                             id="password"
                                             type="password"
@@ -86,10 +85,10 @@ export default function Register() {
 
                                 <div className="grid gap-2">
                                     <Label htmlFor="password_confirmation">
-                                        Confirm
+                                        Confirmer
                                     </Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         <Input
                                             id="password_confirmation"
                                             type="password"
@@ -109,7 +108,7 @@ export default function Register() {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold h-11 transition-all duration-200"
+                                className="mt-2 h-11 w-full bg-amber-600 font-semibold text-white transition-all duration-200 hover:bg-amber-700"
                                 tabIndex={5}
                                 data-test="register-user-button"
                             >
@@ -118,18 +117,18 @@ export default function Register() {
                                 ) : (
                                     <UserPlus className="mr-2 h-4 w-4" />
                                 )}
-                                Start Your Journey
+                                Commencer l'aventure
                             </Button>
                         </div>
 
                         <div className="text-center text-sm text-zinc-500">
-                            Already have an account?{' '}
+                            Vous avez déjà un compte ?{' '}
                             <TextLink
                                 href={login()}
                                 tabIndex={6}
                                 className="font-semibold text-amber-600 hover:text-amber-700 hover:underline"
                             >
-                                Sign in instead
+                                Connectez-vous plutôt
                             </TextLink>
                         </div>
                     </>
